@@ -1,10 +1,17 @@
-# retroxl
+# RetroXL — Legacy-Compatible XLS Generation for Modern Go Applications
+
+<p align="center">
+  <img src="./retroxl.png" alt="RetroXL Logo" width="500"/>
+</p>
+<p align="center">
+  <a href="https://pkg.go.dev/github.com/mhshajib/retroxl"><img src="https://pkg.go.dev/badge/github.com/mhshajib/retroxl.png" alt="Go Reference"></a>
+  <a href="https://goreportcard.com/report/github.com/mhshajib/retroxl"><img src="https://goreportcard.com/badge/github.com/mhshajib/retroxl" alt="Go Report Card"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-RetroXL%20(MIT%20+%20Attribution)-brightgreen.svg" alt="License: RetroXL (MIT + Attribution)"></a>
+</p>
 
 A small Go library for converting modern spreadsheet data to legacy-like XLS files.
 
-`retroxl` generates XML Spreadsheet 2003 (SpreadsheetML) content and writes it with
-a `.xls` extension. Excel and most legacy upload systems treat these files as
-Excel 97–2003 workbooks, which is useful when only `.xls` uploads are accepted.
+`RetroXL` is a lightweight Go library for generating legacy-compatible `XLS` files from modern spreadsheet data. It converts `XLSX`, `CSV`, `TSV`, and in-memory tabular structures into Excel-friendly `.xls` outputs — all without external binaries or system dependencies. `RetroXL` produces SpreadsheetML-based `XLS` files that open seamlessly in Excel and satisfy strict legacy upload systems such as banking portals. The API supports both `file-path` inputs and `in-memory streams`, allowing you to write directly to `disk`, return `bytes` in an API response, or upload to `S3` like cloud storage — all from pure Go.
 
 Repository: https://github.com/mhshajib/retroxl
 
@@ -157,6 +164,17 @@ https://github.com/mhshajib/retroxl
 
 Please include tests for any functional changes.
 
+## Contributors
+
+<a href="https://github.com/mhshajib/retroxl/graphs/contributors">
+  <img src="https://img.shields.io/github/contributors/mhshajib/retroxl?style=for-the-badge" alt="Contributors"/>
+</a>
+
+[![Contributors](https://contrib.rocks/image?repo=mhshajib/retroxl&max=36&v=2)](https://github.com/mhshajib/retroxl/graphs/contributors)
+
 ## License
 
+`RetroXL` License (MIT + Attribution) © 2025 [Sajib Sikder](https://github.com/mhshajib)
+
+This software may be freely used, modified, and distributed with proper attribution to the original author and repository.
 See [LICENSE](./LICENSE).
