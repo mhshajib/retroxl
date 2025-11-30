@@ -166,69 +166,49 @@ func writeCell(enc *xml.Encoder, v any) error {
 	}
 
 	if v == nil {
-		if err := enc.EncodeToken(cellStart.End()); err != nil {
-			return err
-		}
-		return nil
+		return enc.EncodeToken(cellStart.End())
 	}
 
-	dataStart := xml.StartElement{Name: xml.Name{Local: "Data"}}
+	dataType, dataValue := getCellTypeAndValue(v)
+	if err := writeDataElement(enc, dataType, dataValue); err != nil {
+		return err
+	}
 
+	return enc.EncodeToken(cellStart.End())
+}
+
+func getCellTypeAndValue(v any) (string, string) {
 	switch val := v.(type) {
 	case int, int8, int16, int32, int64,
 		uint, uint8, uint16, uint32, uint64,
 		float32, float64:
-		dataStart.Attr = []xml.Attr{
-			{Name: xml.Name{Local: "ss:Type"}, Value: "Number"},
-		}
-		if err := enc.EncodeToken(dataStart); err != nil {
-			return err
-		}
-		if err := enc.EncodeToken(xml.CharData([]byte(fmt.Sprint(val)))); err != nil {
-			return err
-		}
-		if err := enc.EncodeToken(dataStart.End()); err != nil {
-			return err
-		}
+		return "Number", fmt.Sprint(val)
 	case bool:
-		dataStart.Attr = []xml.Attr{
-			{Name: xml.Name{Local: "ss:Type"}, Value: "Boolean"},
-		}
-		if err := enc.EncodeToken(dataStart); err != nil {
-			return err
-		}
-		var b string
+		boolVal := "0"
 		if val {
-			b = "1"
-		} else {
-			b = "0"
+			boolVal = "1"
 		}
-		if err := enc.EncodeToken(xml.CharData([]byte(b))); err != nil {
-			return err
-		}
-		if err := enc.EncodeToken(dataStart.End()); err != nil {
-			return err
-		}
+		return "Boolean", boolVal
 	default:
-		dataStart.Attr = []xml.Attr{
-			{Name: xml.Name{Local: "ss:Type"}, Value: "String"},
-		}
-		if err := enc.EncodeToken(dataStart); err != nil {
-			return err
-		}
-		if err := enc.EncodeToken(xml.CharData([]byte(fmt.Sprint(val)))); err != nil {
-			return err
-		}
-		if err := enc.EncodeToken(dataStart.End()); err != nil {
-			return err
-		}
+		return "String", fmt.Sprint(val)
+	}
+}
+
+func writeDataElement(enc *xml.Encoder, dataType, dataValue string) error {
+	dataStart := xml.StartElement{
+		Name: xml.Name{Local: "Data"},
+		Attr: []xml.Attr{
+			{Name: xml.Name{Local: "ss:Type"}, Value: dataType},
+		},
 	}
 
-	if err := enc.EncodeToken(cellStart.End()); err != nil {
+	if err := enc.EncodeToken(dataStart); err != nil {
 		return err
 	}
-
-	return nil
+	if err := enc.EncodeToken(xml.CharData([]byte(dataValue))); err != nil {
+		return err
+	}
+	return enc.EncodeToken(dataStart.End())
 }
 
 func safeSheetName(s string) string {
