@@ -1,8 +1,14 @@
-// Package retroxl provides utilities for generating legacy-compatible XLS files
-// from modern spreadsheet inputs such as XLSX, CSV, TSV, and in-memory data.
+// Package retroxl is a pure-Go library for generating legacy-compatible XLS
+// files from modern spreadsheet inputs. It converts XLSX, CSV, TSV, and
+// in-memory tabular data into SpreadsheetML-based XLS files that open in
+// Microsoft Excel and pass validation in legacy systems.
 //
-// The package encodes data as XML Spreadsheet 2003 (SpreadsheetML) and writes
-// it with a .xls extension. The generated files open in Excel and are suitable
-// for legacy upload systems such as banking or government portals that still
-// require .xls uploads.
+// RetroXL is designed for integrations where banks, government portals,
+// or older enterprise systems still require `.xls` uploads instead of modern
+// `.xlsx`. The library has no external dependencies and does not rely on
+// LibreOffice, Python, or system binaries.
+//
+// The API supports converting files from disk or constructing sheets in
+// memory. Output can be written directly to disk, returned as []byte,
+// or streamed to any io.Writer (HTTP response, gRPC, S3 uploads, etc.).
 package retroxl

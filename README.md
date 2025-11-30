@@ -6,26 +6,53 @@
 <p align="center">
   <a href="https://pkg.go.dev/github.com/mhshajib/retroxl"><img src="https://pkg.go.dev/badge/github.com/mhshajib/retroxl.png" alt="Go Reference"></a>
   <a href="https://goreportcard.com/report/github.com/mhshajib/retroxl"><img src="https://goreportcard.com/badge/github.com/mhshajib/retroxl?branch=main" alt="Go Report Card"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-RetroXL%20(MIT%20+%20Attribution)-brightgreen.svg" alt="License: RetroXL (MIT + Attribution)"></a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT">
+  </a>
 </p>
 
-A small Go library for converting modern spreadsheet data to legacy-like XLS files.
+A pure-Go library for converting XLSX/CSV/TSV and in-memory data into legacy-compatible `.xls` files.
 
 `RetroXL` is a lightweight Go library for generating legacy-compatible `XLS` files from modern spreadsheet data. It converts `XLSX`, `CSV`, `TSV`, and in-memory tabular structures into Excel-friendly `.xls` outputs — all without external binaries or system dependencies. `RetroXL` produces SpreadsheetML-based `XLS` files that open seamlessly in Excel and satisfy strict legacy upload systems such as banking portals. The API supports both `file-path` inputs and `in-memory streams`, allowing you to write directly to `disk`, return `bytes` in an API response, or upload to `S3` like cloud storage — all from pure Go.
 
 Repository: https://github.com/mhshajib/retroxl
 
+## Why RetroXL?
+
+Many banking, government, and enterprise portals still refuse `.xlsx` files and
+only accept legacy `.xls` uploads. Generating real `.xls` files normally requires
+external tools like LibreOffice, Python, or Windows-only libraries.
+
+RetroXL solves this by providing a **pure-Go**, dependency-free way to generate
+SpreadsheetML-based `.xls` files directly from your Go services — ideal for APIs,
+background jobs, cloud functions, or banking integrations.
+
 ## Features
 
-- Convert from modern formats to `.xls`:
-  - `.xlsx`
-  - `.csv`
-  - `.tsv`
-- Use file paths or in-memory data.
-- Write output to:
-  - a file on disk
-  - a `[]byte`
-  - any `io.Writer` (HTTP response, S3 upload, etc.)
+- Pure-Go XLS generation (no LibreOffice, no Python, no system binaries)
+- Converts:
+  - `.xlsx` → `.xls`
+  - `.csv` / `.tsv` → `.xls`
+  - in-memory tables (`[][]any`) → `.xls`
+- Generates SpreadsheetML-compatible `.xls` recognized by Excel
+- Supports:
+  - file-path input/output
+  - byte slice output (`[]byte`)
+  - streaming output via `io.Writer` (HTTP, gRPC, S3)
+- Ideal for:
+  - banking portals
+  - government upload systems
+  - legacy enterprise workflows
+
+## Supported Formats
+
+| Input Type                 | Output                   |
+| -------------------------- | ------------------------ |
+| XLSX file                  | XLS (SpreadsheetML 2003) |
+| CSV / TSV                  | XLS                      |
+| In-memory data (`[][]any`) | XLS                      |
+| gRPC request               | XLS (bytes)              |
+| HTTP streaming             | XLS                      |
 
 ## Installation
 
@@ -129,6 +156,32 @@ if err != nil {
 // data contains the XLS file content.
 ```
 
+### Convert a slice of structs to XLS
+
+```go
+type Payment struct {
+    AccountNo string
+    Amount    float64
+    Reference string
+}
+
+func main() {
+    items := []Payment{
+        {"1234567890", 1200.50, "Invoice-2025-001"},
+        {"0987654321", 300.00,  "Invoice-2025-002"},
+    }
+
+    headers := []string{"AccountNo", "Amount", "Reference"}
+    var rows [][]any
+    for _, p := range items {
+        rows = append(rows, []any{p.AccountNo, p.Amount, p.Reference})
+    }
+
+    sheet := retroxl.FromRows("BankUpload", headers, rows)
+    _ = retroxl.WriteXLSFile("payments.xls", []retroxl.Sheet{sheet})
+}
+
+
 ## API Overview
 
 All types and functions are documented with GoDoc comments.
@@ -174,7 +227,9 @@ Please include tests for any functional changes.
 
 ## License
 
-`RetroXL` License (MIT + Attribution) © 2025 [Sajib Sikder](https://github.com/mhshajib)
+RetroXL is licensed under the MIT License.
+See the full text in [LICENSE](./LICENSE).
 
-This software may be freely used, modified, and distributed with proper attribution to the original author and repository.
-See [LICENSE](./LICENSE).
+Attribution is appreciated but not required.
+See [RETROXL_ATTRIBUTION](./RETROXL_ATTRIBUTION) for optional attribution guidelines.
+```
