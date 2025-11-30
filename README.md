@@ -5,7 +5,7 @@
 </p>
 <p align="center">
   <a href="https://pkg.go.dev/github.com/mhshajib/retroxl"><img src="https://pkg.go.dev/badge/github.com/mhshajib/retroxl.png" alt="Go Reference"></a>
-  <a href="https://goreportcard.com/report/github.com/mhshajib/retroxl"><img src="https://goreportcard.com/badge/github.com/mhshajib/retroxl" alt="Go Report Card"></a>
+  <a href="https://goreportcard.com/report/github.com/mhshajib/retroxl"><img src="https://goreportcard.com/badge/github.com/mhshajib/retroxl?branch=main" alt="Go Report Card"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-RetroXL%20(MIT%20+%20Attribution)-brightgreen.svg" alt="License: RetroXL (MIT + Attribution)"></a>
 </p>
 
