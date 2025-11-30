@@ -180,7 +180,7 @@ func main() {
     sheet := retroxl.FromRows("BankUpload", headers, rows)
     _ = retroxl.WriteXLSFile("payments.xls", []retroxl.Sheet{sheet})
 }
-
+```
 
 ## API Overview
 
@@ -232,4 +232,7 @@ See the full text in [LICENSE](./LICENSE).
 
 Attribution is appreciated but not required.
 See [RETROXL_ATTRIBUTION](./RETROXL_ATTRIBUTION) for optional attribution guidelines.
+
+```
+
 ```
